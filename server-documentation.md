@@ -10,6 +10,7 @@ Levantamento somente leitura feito em 27/07/2026.
 - Docker e containerd do k3s rodam separadamente;
 - Tailscale `100.109.102.107`;
 - Netdata ativo;
+- Headlamp e Netdata são as ferramentas atuais de monitoramento;
 - `cloudflare-traefik-bridge.service` encaminha
   `127.0.0.1:80` para o NodePort `127.0.0.1:30080`.
 
