@@ -62,6 +62,8 @@ pertence a este repositório.
 - Execute `terraform fmt -check -recursive` e `terraform validate`.
 - Analise o plano inteiro antes de aplicar.
 - Pull requests fazem `plan`; apenas `main` pode fazer `apply`.
+- Repos de aplicações devem chamar o workflow reutilizável
+  `.github/workflows/terraform-kubernetes.yml`; não copie sua implementação.
 - Não use `-target` como fluxo normal.
 - Não use provisioners `local-exec` ou `remote-exec` para contornar providers.
 - Não altere state manualmente sem backup e plano de recuperação.
@@ -115,4 +117,3 @@ Uma alteração de infraestrutura só está concluída quando:
 - ownership e rollback estão claros;
 - documentação foi atualizada;
 - verificações de saúde proporcionais ao risco foram executadas.
-
