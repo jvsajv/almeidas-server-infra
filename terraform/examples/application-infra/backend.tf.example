@@ -1,0 +1,6 @@
+terraform {
+  backend "kubernetes" {
+    namespace     = "kube-system"
+    secret_suffix = "NOME-DO-PROJETO"
+  }
+}
