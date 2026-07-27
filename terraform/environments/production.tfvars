@@ -1,41 +1,22 @@
 namespaces = {
-  apps = {
+  data = {
     labels = {
       environment = "production"
+      purpose     = "stateful-services"
     }
     quota = {
       requests_cpu    = "2"
       requests_memory = "4Gi"
       limits_cpu      = "4"
-      limits_memory   = "8Gi"
-      pods            = "30"
+      limits_memory   = "6Gi"
+      pods            = "10"
       services        = "20"
     }
     defaults = {
-      request_cpu    = "100m"
-      request_memory = "128Mi"
-      limit_cpu      = "500m"
-      limit_memory   = "512Mi"
-    }
-  }
-
-  shared-services = {
-    labels = {
-      environment = "production"
-    }
-    quota = {
-      requests_cpu    = "2"
-      requests_memory = "4Gi"
-      limits_cpu      = "4"
-      limits_memory   = "8Gi"
-      pods            = "20"
-      services        = "20"
-    }
-    defaults = {
-      request_cpu    = "100m"
-      request_memory = "128Mi"
-      limit_cpu      = "1"
-      limit_memory   = "1Gi"
+      request_cpu    = "250m"
+      request_memory = "512Mi"
+      limit_cpu      = "2"
+      limit_memory   = "2Gi"
     }
   }
 }

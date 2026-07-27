@@ -29,3 +29,27 @@ variable "namespaces" {
     error_message = "Os nomes dos namespaces devem ser DNS labels válidos do Kubernetes."
   }
 }
+
+variable "mongodb_image" {
+  description = "Imagem imutável da instância MongoDB compartilhada."
+  type        = string
+  default     = "docker.io/library/mongo:8.0.26-noble"
+}
+
+variable "mongodb_storage_size" {
+  description = "Capacidade declarada do volume local do MongoDB."
+  type        = string
+  default     = "10Gi"
+}
+
+variable "mongodb_local_path" {
+  description = "Diretório persistente no nó k3s."
+  type        = string
+  default     = "/home/jvsajv/data/mongodb"
+}
+
+variable "tailscale_ipv4" {
+  description = "IP Tailscale do nó usado para acesso privado ao banco."
+  type        = string
+  default     = "100.109.102.107"
+}
