@@ -21,7 +21,7 @@ usa Docker, Kubernetes ou GitHub Actions.
 | `role-iniciativa-api` | Dockerfile, Compose e deploy k3s | permanece no repo; ganhará Terraform próprio |
 | `role-iniciativa-front` | Dockerfile, Compose e deploy k3s | permanece no repo; ganhará Terraform próprio |
 | `taca-cogumelo-web` | Dockerfile, Compose e deploy SSH/Docker | permanece no repo; será consolidado no k3s |
-| `almeidas-server-checkup` | Compose, workflow e units systemd | permanece no repo por ser específico do monitor |
+| `almeidas-server-checkup` | Compose, workflow e units systemd | projeto descontinuado e arquivado |
 | `unknow-friends` | Deployment e Service em `kubernetes.yaml` | permanece no repo; não está no cluster atual |
 | `kachow-elojob` | Compose e deploy multi-servidor | permanece no repo; não está no servidor atual |
 | `multiverso-among` | arquivos locais não versionados | decidir se o serviço ainda deve existir |
@@ -59,11 +59,18 @@ Há uma instância Docker publicada na porta `8989` e outra no k3s. A Action do
 repo atualiza apenas a instância Docker. É necessário identificar a instância
 canônica e confirmar a localização do banco SQLite antes de desativar uma delas.
 
-### Server Checkup incompleto
+### Server Checkup removido
 
-`server-monitor-agent.service` está ativo, mas os serviços definidos no Compose
-não estão rodando. O workflow mais recente consta como bem-sucedido, portanto
-falta monitoramento pós-deploy.
+O projeto não era mais usado e duplicava funções do Netdata e Headlamp. Em
+27/07/2026 foram removidos do servidor:
+
+- `server-monitor-agent.service`;
+- checkout, banco SQLite e ambiente virtual;
+- imagens Docker `deploy-web:latest` e `deploy-backend:latest`.
+
+O repositório `jvsajv/almeidas-server-checkup` foi arquivado no GitHub. Após a
+remoção, RAM e swap diminuíram e os componentes de monitoramento restantes
+continuaram saudáveis.
 
 ### Arquivos locais sensíveis
 
@@ -81,7 +88,8 @@ usados como fonte de verdade durante a migração.
 6. Desabilitar o AddOn antigo somente depois de todos os planos serem vazios.
 7. Testar rotas, persistência e rollback.
 8. Consolidar a instância Docker duplicada.
-9. Corrigir o deploy e health check do Server Checkup.
+9. Manter o Server Checkup arquivado; Netdata e Headlamp são as ferramentas
+   atuais de monitoramento.
 
 ## Condição para remover configuração antiga
 
@@ -93,4 +101,3 @@ Um manifest ou workflow antigo só pode ser removido quando:
 - Secrets existentes não forem incluídos no state;
 - aplicação, banco e Ingress tiverem sido testados;
 - houver procedimento de rollback.
-
