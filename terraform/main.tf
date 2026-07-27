@@ -54,3 +54,13 @@ import {
   to = kubernetes_namespace_v1.managed["data"]
   id = "data"
 }
+
+import {
+  to = kubernetes_resource_quota_v1.namespace["data"]
+  id = "data/namespace-quota"
+}
+
+import {
+  to = kubernetes_limit_range_v1.namespace["data"]
+  id = "data/container-defaults"
+}

@@ -211,3 +211,28 @@ resource "kubernetes_stateful_set_v1" "mongodb" {
   ]
 }
 
+import {
+  to = kubernetes_persistent_volume_v1.mongodb
+  id = "platform-mongodb-data"
+}
+
+import {
+  to = kubernetes_persistent_volume_claim_v1.mongodb
+  id = "data/mongodb-data"
+}
+
+import {
+  to = kubernetes_service_v1.mongodb_headless
+  id = "data/mongodb"
+}
+
+import {
+  to = kubernetes_service_v1.mongodb_access
+  id = "data/mongodb-access"
+}
+
+import {
+  to = kubernetes_stateful_set_v1.mongodb
+  id = "data/mongodb"
+}
+

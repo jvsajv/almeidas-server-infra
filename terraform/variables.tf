@@ -33,7 +33,9 @@ variable "namespaces" {
 variable "mongodb_image" {
   description = "Imagem imutável da instância MongoDB compartilhada."
   type        = string
-  default     = "docker.io/library/mongo:8.0.26-noble"
+  # MongoDB 8.0+ é incompatível com kernels Linux 6.19+ (SERVER-121912).
+  # O host usa kernel 7.0; manter 7.0 até a correção oficial chegar a uma major.
+  default = "docker.io/library/mongo:7.0.39-jammy"
 }
 
 variable "mongodb_storage_size" {
