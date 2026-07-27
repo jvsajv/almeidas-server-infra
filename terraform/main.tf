@@ -49,3 +49,8 @@ resource "kubernetes_limit_range_v1" "namespace" {
     }
   }
 }
+
+import {
+  to = kubernetes_namespace_v1.managed["data"]
+  id = "data"
+}

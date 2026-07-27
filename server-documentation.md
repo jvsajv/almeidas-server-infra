@@ -27,6 +27,26 @@ Levantamento somente leitura feito em 27/07/2026.
 Os componentes padrão do k3s devem continuar sob responsabilidade do próprio
 k3s. Eles não devem ser duplicados no Terraform.
 
+## Plataforma de dados
+
+Em 27/07/2026 foi iniciada a migração do MongoDB 4.4 sem autenticação para uma
+instância MongoDB 8.0 autenticada no namespace `data`.
+
+- o banco antigo permanece intacto durante a migração;
+- backup lógico validado por checksum em
+  `/home/jvsajv/backups/mongodb/`;
+- 13 coleções e 575 documentos no momento do backup;
+- Secret administrativo criado diretamente no Kubernetes, fora do Terraform
+  state;
+- volume novo com política `Retain`;
+- endpoint interno planejado:
+  `mongodb.data.svc.cluster.local:27017`;
+- endpoint privado planejado:
+  `100.109.102.107:27018`.
+
+O endpoint privado deve ser alcançável somente pela tailnet. O encaminhamento
+manual e não autenticado da porta `27017` será removido após o cutover.
+
 ## Aplicações
 
 ### liga-cogumelo

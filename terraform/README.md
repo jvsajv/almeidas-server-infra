@@ -8,6 +8,10 @@ Este diretório gerencia recursos de plataforma: namespaces compartilhados,
 quotas, políticas e, futuramente, operadores, observabilidade e serviços usados
 por mais de uma aplicação.
 
+A plataforma de dados inclui uma instância MongoDB autenticada no namespace
+`data`. Senhas são bootstrapadas diretamente como Kubernetes Secrets e nunca
+declaradas no Terraform, pois o provider persistiria seus valores no state.
+
 Deployment, Service, Ingress, database, user, volume e Secret exclusivos devem
 ficar no repositório da própria aplicação.
 
