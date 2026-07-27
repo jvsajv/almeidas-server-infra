@@ -65,6 +65,7 @@ jobs:
           umask 077
           printf '%s' "$KUBECONFIG_BASE64" | base64 --decode > "$RUNNER_TEMP/kubeconfig"
           echo "KUBECONFIG=$RUNNER_TEMP/kubeconfig" >> "$GITHUB_ENV"
+          echo "KUBE_CONFIG_PATH=$RUNNER_TEMP/kubeconfig" >> "$GITHUB_ENV"
           kubectl --kubeconfig "$RUNNER_TEMP/kubeconfig" \
             config set-cluster default --server="$KUBE_API_SERVER"
 
