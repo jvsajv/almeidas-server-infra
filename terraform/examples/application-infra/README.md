@@ -12,3 +12,12 @@ O repo da aplicação deve ser dono de:
 
 O repo central continua dono de serviços compartilhados, operadores, storage
 classes, namespaces, observabilidade e políticas do cluster.
+
+Copie `workflow.yml.example` para `.github/workflows/terraform.yml` no repo da
+aplicação e remova o sufixo `.example`. Configure o Environment `production`
+com os mesmos três Secrets e a variável `KUBE_API_SERVER` documentados no
+README do repo central.
+
+O workflow reutilizável executa Terraform, mas não inventa recursos. O
+diretório `terraform/` de cada aplicação ainda deve declarar explicitamente
+Deployment, Service, Ingress, banco e volumes que pertencem à aplicação.

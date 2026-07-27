@@ -1,29 +1,27 @@
-name: Terraform platform
+name: Terraform application
 
 on:
   pull_request:
     paths:
       - "terraform/**"
       - ".github/workflows/terraform.yml"
-      - ".github/workflows/terraform-kubernetes.yml"
   push:
     branches: [main]
     paths:
       - "terraform/**"
       - ".github/workflows/terraform.yml"
-      - ".github/workflows/terraform-kubernetes.yml"
   workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: terraform-platform-production
+  group: terraform-NOME-DO-PROJETO-production
   cancel-in-progress: false
 
 jobs:
   terraform:
-    uses: ./.github/workflows/terraform-kubernetes.yml
+    uses: jvsajv/almeidas-server-infra/.github/workflows/terraform-kubernetes.yml@main
     with:
       working_directory: terraform
       var_file: environments/production.tfvars

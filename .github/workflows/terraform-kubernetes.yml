@@ -1,0 +1,99 @@
+name: Reusable Terraform for k3s
+
+on:
+  workflow_call:
+    inputs:
+      working_directory:
+        description: Directory containing the Terraform root module
+        required: false
+        type: string
+        default: terraform
+      var_file:
+        description: Variable file relative to working_directory
+        required: false
+        type: string
+        default: environments/production.tfvars
+      kube_api_server:
+        description: k3s API URL reachable through Tailscale
+        required: true
+        type: string
+      apply:
+        description: Apply the saved plan after validation
+        required: false
+        type: boolean
+        default: false
+    secrets:
+      TS_OAUTH_CLIENT_ID:
+        required: true
+      TS_OAUTH_SECRET:
+        required: true
+      KUBECONFIG_BASE64:
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    environment: production
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: ${{ inputs.working_directory }}
+
+    steps:
+      - name: Checkout caller repository
+        uses: actions/checkout@v4
+
+      - name: Join tailnet
+        uses: tailscale/github-action@v4
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:github-action
+
+      - name: Configure kubeconfig
+        shell: bash
+        env:
+          KUBECONFIG_BASE64: ${{ secrets.KUBECONFIG_BASE64 }}
+          KUBE_API_SERVER: ${{ inputs.kube_api_server }}
+        run: |
+          set -euo pipefail
+          test -n "$KUBECONFIG_BASE64"
+          test -n "$KUBE_API_SERVER"
+          umask 077
+          printf '%s' "$KUBECONFIG_BASE64" | base64 --decode > "$RUNNER_TEMP/kubeconfig"
+          echo "KUBECONFIG=$RUNNER_TEMP/kubeconfig" >> "$GITHUB_ENV"
+          kubectl --kubeconfig "$RUNNER_TEMP/kubeconfig" \
+            config set-cluster default --server="$KUBE_API_SERVER"
+
+      - name: Check cluster access
+        run: kubectl get node almeidas-server
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.10.5"
+
+      - name: Terraform fmt
+        run: terraform fmt -check -recursive
+
+      - name: Terraform init
+        run: terraform init -input=false
+
+      - name: Terraform validate
+        run: terraform validate
+
+      - name: Terraform plan
+        run: >-
+          terraform plan
+          -input=false
+          -lock-timeout=5m
+          -var-file="${{ inputs.var_file }}"
+          -var="kubeconfig_path=$KUBECONFIG"
+          -out=tfplan
+
+      - name: Terraform apply
+        if: inputs.apply
+        run: terraform apply -input=false -auto-approve tfplan

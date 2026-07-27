@@ -67,13 +67,33 @@ E desta variável:
 
 ```text
 KUBE_API_SERVER=https://almeidas-server-1.tail257531.ts.net:6443
+TERRAFORM_APPLY_ENABLED=false
 ```
 
 Pull requests executam `plan`. Somente push em `main` executa `apply`.
+Mesmo em `main`, o apply permanece bloqueado enquanto
+`TERRAFORM_APPLY_ENABLED` não for explicitamente alterado para `true`.
+
+## Uso por outros projetos
+
+O workflow `.github/workflows/terraform-kubernetes.yml` é reutilizável por
+outros repositórios privados da conta. Um exemplo completo do caller está em
+`examples/application-infra/workflow.yml.example`.
+
+Cada projeto continua tendo:
+
+- seu próprio diretório `terraform/`;
+- backend com `secret_suffix` exclusivo;
+- Environment `production`;
+- state isolado;
+- ownership apenas dos seus recursos.
+
+Criar um repositório no GitHub não cria infraestrutura automaticamente. O
+projeto passa a ter `plan/apply` automático quando adiciona o Terraform e o
+caller do workflow reutilizável.
 
 ## Primeiro apply
 
 O AddOn k3s `migrated-apps` ainda controla os aplicativos atuais. Não declare
 nem importe esses recursos neste state. O primeiro plano deste diretório deve
 mostrar apenas os recursos de plataforma explicitamente adicionados aqui.
-
