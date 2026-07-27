@@ -30,7 +30,7 @@ k3s. Eles não devem ser duplicados no Terraform.
 ## Plataforma de dados
 
 Em 27/07/2026 foi iniciada a migração do MongoDB 4.4 sem autenticação para uma
-instância MongoDB 8.0 autenticada no namespace `data`.
+instância MongoDB 7.0 autenticada no namespace `data`.
 
 - o banco antigo permanece intacto durante a migração;
 - backup lógico validado por checksum em
@@ -46,6 +46,10 @@ instância MongoDB 8.0 autenticada no namespace `data`.
 
 O endpoint privado deve ser alcançável somente pela tailnet. O encaminhamento
 manual e não autenticado da porta `27017` será removido após o cutover.
+
+MongoDB 8.0 ou superior não pode ser usado enquanto o projeto upstream mantiver
+a incompatibilidade SERVER-121912 com kernels Linux 6.19+. O host usa kernel
+7.0. MongoDB 7.0.39 foi escolhido como versão temporária suportada.
 
 ## Aplicações
 
